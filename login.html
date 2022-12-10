@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Page</title>
+    <style>
+      body {
+        display: grid;
+        place-items: center;
+        height: 100vh;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+      }
+      #response {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="response">
+      <h1>password salah</h1>
+    </div>
+    <form class="form" id="form">
+      <label for="inp_username">Username</label>
+      <input type="text" name="phone" placeholder="Username" />
+      <label for="inp_password">Password</label>
+      <input type="password" name="password" placeholder="password" />
+      <button type="submit">login</button>
+    </form>
+  </body>
+  <script>
+    const form = document.getElementById("form");
+    const response = document.getElementById("response");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      console.log(form);
+      const payLoad = new FormData(form);
+      console.log(payLoad);
+      fetch("https://6c96-103-213-129-251.ap.ngrok.io/auth/login", {
+        method: "POST",
+        body: payLoad,
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+
+          if (data.access_token) {
+            localStorage.setItem("token", data.access_token);
+            window.location.href = "dashboard.html";
+          } else {
+            response.style.display = "block";
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  </script>
+</html>
